@@ -1,95 +1,9 @@
-
-'use strict';
-
-async function onSubmit() {
-    if (!validateForm())
-        return;
-
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
-
-    const response = await login(username, password)
-    if (!validateResponse()) {
-        displayErrorMessage(response.ResultMessage);
-        return;
-    }
-
-    displayEntityDetails(response);
-
-    function validateForm() {
-        const form = document.getElementById('login')
-        form.classList.add('was-validated');
-        return form.checkValidity();
-    }
-
-    function validateResponse() { return !!response && (!response.ResultCode || response.ResultCode !== -1); }
-
-    function displayErrorMessage() {
-        const errorMessageElement = document.getElementById('error-message');
-
-        errorMessageElement.classList.remove('d-none');
-        errorMessageElement.textContent = `${response.ResultMessage}!`;
-    }
-
-    function displayEntityDetails(data) {
-        document.getElementById('entity-details').classList.remove('d-none');
-        document.getElementById('login').classList.add('d-none');
-
-        document.getElementById('entity-id').value = data.EntityId;
-        document.getElementById('first-name').value = data.FirstName;
-        document.getElementById('last-name').value = data.LastName;
-        document.getElementById('company').value = data.Company;
-        document.getElementById('address').value = data.Address;
-        document.getElementById('city').value = data.City;
-        document.getElementById('country').value = data.Country;
-        document.getElementById('zip').value = data.Zip;
-        document.getElementById('phone').value = data.Phone;
-        document.getElementById('mobile').value = data.Mobile;
-        document.getElementById('email').value = data.Email;
-        document.getElementById('email-confirm').checked = data.EmailConfirm;
-        document.getElementById('mobile-confirm').checked = data.MobileConfirm;
-        document.getElementById('country-id').value = data.CountryID;
-        document.getElementById('status').value = data.Status;
-        document.getElementById('lid').value = data.lid;
-        document.getElementById('ftp-host').value = data.FTPHost;
-        document.getElementById('ftp-port').value = data.FTPPort;
-    }
-}
-
-async function login(username, password) {
-    return await fetch('https://isapi.icu-tech.com/icutech-test.dll/soap/IICUTech', {
-        method: 'POST',
-        body: `<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:ICUTech.Intf-IICUTech">
+"use strict";async function onSubmit(){var e;if(!function e(){let t=document.getElementById("login");return t.classList.add("was-validated"),t.checkValidity()}())return;let t=document.getElementById("username").value,n=document.getElementById("password").value,a=await login(t,n);if(!(a&&(!a.ResultCode||-1!==a.ResultCode))){!function e(){let t=document.getElementById("error-message");t.classList.remove("d-none"),t.textContent=`${a.ResultMessage}!`}(a.ResultMessage);return}e=a,document.getElementById("entity-details").classList.remove("d-none"),document.getElementById("login").classList.add("d-none"),document.getElementById("entity-id").value=e.EntityId,document.getElementById("first-name").value=e.FirstName,document.getElementById("last-name").value=e.LastName,document.getElementById("company").value=e.Company,document.getElementById("address").value=e.Address,document.getElementById("city").value=e.City,document.getElementById("country").value=e.Country,document.getElementById("zip").value=e.Zip,document.getElementById("phone").value=e.Phone,document.getElementById("mobile").value=e.Mobile,document.getElementById("email").value=e.Email,document.getElementById("email-confirm").checked=e.EmailConfirm,document.getElementById("mobile-confirm").checked=e.MobileConfirm,document.getElementById("country-id").value=e.CountryID,document.getElementById("status").value=e.Status,document.getElementById("lid").value=e.lid,document.getElementById("ftp-host").value=e.FTPHost,document.getElementById("ftp-port").value=e.FTPPort}async function login(e,t){return await fetch("https://isapi.icu-tech.com/icutech-test.dll/soap/IICUTech",{method:"POST",body:`<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:ICUTech.Intf-IICUTech">
         <soapenv:Header/>
         <soapenv:Body>
            <urn:Login soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-              <UserName xsi:type="xsd:string">${username}</UserName>
-              <Password xsi:type="xsd:string">${password}</Password>
+              <UserName xsi:type="xsd:string">${e}</UserName>
+              <Password xsi:type="xsd:string">${t}</Password>
            </urn:Login>
         </soapenv:Body>
-     </soapenv:Envelope>`
-    })
-        .then(response => response.text())
-        .then(data => proccessData(data))
-        .catch(error => processError(error));
-
-    function proccessData(data) {
-        const parser = new DOMParser();
-        const document = parser.parseFromString(data, 'application/xml');
-        const json = document.getElementsByTagName('return')[0].childNodes[0].nodeValue;
-
-        return JSON.parse(json);
-    }
-
-    function processError(error) {
-        // ToDo: Implement error interceptor!
-        displayErrorMessage('Something went wrong!');
-    }
-}
-
-function displayErrorMessage(errorMessage) {
-    const errorMessageElement = document.getElementById('error-message');
-
-    errorMessageElement.classList.remove('d-none');
-    errorMessageElement.textContent = `${errorMessage}!`;
-}
+     </soapenv:Envelope>`}).then(e=>e.text()).then(e=>(function e(t){let n=new DOMParser,a=n.parseFromString(t,"application/xml"),s=a.getElementsByTagName("return")[0].childNodes[0].nodeValue;return JSON.parse(s)})(e)).catch(e=>{var t;return t=e,void displayErrorMessage("Something went wrong!")})}function displayErrorMessage(e){let t=document.getElementById("error-message");t.classList.remove("d-none"),t.textContent=`${e}!`}window.addEventListener("load",function(){let e=document.getElementById("login");e.addEventListener("submit",function(t){!1===e.checkValidity()&&(t.preventDefault(),t.stopPropagation()),e.classList.add("was-validated")},!1)},!1);
