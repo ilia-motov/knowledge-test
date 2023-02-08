@@ -57,7 +57,7 @@ async function onSubmit() {
 }
 
 async function login(username, password) {
-    return await fetch('http://isapi.icu-tech.com/icutech-test.dll/soap/IICUTech', {
+    return await fetch('https://isapi.icu-tech.com/icutech-test.dll/soap/IICUTech', {
         method: 'POST',
         body: `<soapenv:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:urn="urn:ICUTech.Intf-IICUTech">
         <soapenv:Header/>
